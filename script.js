@@ -77,6 +77,46 @@ function generateQuestions(container, data) {
   }
 }
 
+function calculateAverages(data, formData) {
+  const results = {};
+  for (const [section, questions] of Object.entries(data)) {
+    let sum = 0;
+    let count = 0;
+    questions.forEach((_, i) => {
+      const val = formData.get(`${section}-${i}`);
+      if (val) {
+        sum += Number(val);
+        count++;
+      }
+    });
+    results[section] = count > 0 ? (sum / count) : 0;
+  }
+  return results;
+}
+
+function renderRadarChart(labels, data, canvasId, chartTitle) {
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels,
+      datasets: [{
+        label: chartTitle,
+        data,
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgb(54, 162, 235)',
+        pointBackgroundColor: 'rgb(54, 162, 235)'
+      }]
+    },
+    options: {
+      responsive: true,
+      scale: {
+        ticks: { min: 1, max: 5, stepSize: 1 }
+      }
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const challengeContainer = document.querySelector(".question-set");
   const rolesContainer = document.getElementById("roles-section");
@@ -85,7 +125,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("assessment-form").addEventListener("submit", function(e) {
     e.preventDefault();
-    document.getElementById("result").innerHTML = "<strong>Thank you!</strong> Your responses have been recorded.";
-    this.reset();
+
+    // Gather responses
+    const formData = new FormData(this);
+
+    // Calculate averages
+    const challengeResults = calculateAverages(challenges, formData);
+    const roleResults = calculateAverages(roles, formData);
+
+    // Prepare radar chart HTML containers
+    document.getElementById("result").innerHTML = `
+      <strong>Your Assessment Results:</strong>
+      <div style="width: 400px; margin-bottom:20px;"><canvas id="challengeRadar"></canvas></div>
+      <div style="width: 400px;"><canvas id="rolesRadar"></canvas></div>
+    `;
+
+    // Render radar charts
+    renderRadarChart(
+      Object.keys(challengeResults),
+      Object.values(challengeResults),
+      "challengeRadar",
+      "Challenges"
+    );
+    renderRadarChart(
+      Object.keys(roleResults),
+      Object.values(roleResults),
+      "rolesRadar",
+      "Roles"
+    );
   });
 });
