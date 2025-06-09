@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Real-Time Leadership Self-Assessment</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>Real-Time Leadership Self-Assessment Questionnaire</h1>
+
+    <form id="assessment-form">
+      <fieldset>
+        <legend>Personal Information</legend>
+        <input type="text" placeholder="First Name" name="firstName" required>
+        <input type="text" placeholder="Last Name" name="lastName" required>
+        <input type="text" placeholder="Organization" name="organization" required>
+        <input type="text" placeholder="Position" name="position" required>
+        <input type="email" placeholder="Email" name="email" required>
+        <input type="tel" placeholder="Contact Number" name="contact" required>
+      </fieldset>
+
+      <section>
+        <h2>Real-Time Challenges</h2>
+        <div class="question-set">
+          <!-- Questions inserted by JS -->
+        </div>
+      </section>
+
+      <section>
+        <h2>Key Roles of Real-Time Leaders</h2>
+        <div class="question-set" id="roles-section">
+          <!-- Questions inserted by JS -->
+        </div>
+      </section>
+
+      <button type="submit">Submit Assessment</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
