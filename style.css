@@ -1,21 +1,49 @@
+/* ============================
+   CSS Variables for Consistency
+   ============================ */
+:root {
+  --primary-color: #007BFF;
+  --primary-hover: #0056b3;
+  --background-color: #f8f9fa;
+  --container-bg: #fff;
+  --text-color: #333;
+  --border-color: #ccc;
+  --shadow: 0 0 10px rgba(0,0,0,0.1);
+  --radius: 5px;
+  --font-main: 'Montserrat', sans-serif;
+  --transition: background 0.3s, color 0.3s, border 0.3s;
+  --max-width: 900px;
+}
+
+/* ===================
+   Base Styles & Layout
+   =================== */
 body {
-  font-family: 'Montserrat', sans-serif;
-  background-color: #f8f9fa;
+  font-family: var(--font-main);
+  background-color: var(--background-color);
+  color: var(--text-color);
   margin: 0;
   padding: 20px;
 }
 
 .container {
-  max-width: 900px;
+  max-width: var(--max-width);
   margin: 0 auto;
-  background: #ffffff;
+  background: var(--container-bg);
   padding: 30px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
 }
 
 h1, h2 {
   text-align: center;
-  color: #333;
+  color: var(--text-color);
+  margin-top: 0;
+}
+
+h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
 }
 
 fieldset {
@@ -24,6 +52,9 @@ fieldset {
   margin-bottom: 30px;
 }
 
+/* =====================
+   Form Elements & Inputs
+   ===================== */
 input[type="text"],
 input[type="email"],
 input[type="tel"] {
@@ -31,12 +62,27 @@ input[type="tel"] {
   padding: 10px;
   margin-top: 10px;
   margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: var(--transition);
+  background: #fafbfc;
 }
 
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus {
+  outline: 2px solid var(--primary-color);
+  border-color: var(--primary-color);
+  background: #fff;
+}
+
+/* ======================
+   Question & Rating Items
+   ====================== */
 .question {
   margin-bottom: 20px;
+  padding-bottom: 8px;
 }
 
 .question p {
@@ -47,33 +93,67 @@ input[type="tel"] {
   display: flex;
   justify-content: space-between;
   margin-top: 5px;
+  gap: 10px;
 }
 
 .rating label {
   margin-right: 10px;
+  cursor: pointer;
+  user-select: none;
 }
 
+.rating input[type="radio"] {
+  accent-color: var(--primary-color);
+}
+
+/* ==================
+   Button Styles
+   ================== */
 button {
-  background-color: #007BFF;
-  color: white;
+  background-color: var(--primary-color);
+  color: #fff;
   border: none;
   padding: 15px 30px;
-  border-radius: 5px;
+  border-radius: var(--radius);
   font-size: 16px;
   cursor: pointer;
   display: block;
   margin: 30px auto 0;
+  transition: var(--transition);
+  will-change: background-color;
 }
 
-button:hover {
-  background-color: #0056b3;
+button:hover,
+button:focus {
+  background-color: var(--primary-hover);
+  outline: 2px solid var(--primary-hover);
 }
 
+button:active {
+  background-color: #003e7e;
+}
+
+/* ==================
+   Results & Feedback
+   ================== */
 #result {
   text-align: center;
   margin-top: 30px;
 }
-/* Responsive Layout for PWA & Mobile Devices */
+
+[aria-live] {
+  outline: none;
+}
+
+/* ===========================
+   Responsive Layout - Tablets
+   =========================== */
+@media (max-width: 1024px) {
+  .container {
+    max-width: 98vw;
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 20px;
@@ -89,10 +169,12 @@ button:hover {
   .rating {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0;
   }
 
   .rating label {
     margin-bottom: 8px;
+    margin-right: 0;
   }
 
   button {
@@ -101,6 +183,9 @@ button:hover {
   }
 }
 
+/* =========================
+   Responsive Layout - Mobile
+   ========================= */
 @media (max-width: 480px) {
   h1, h2 {
     font-size: 1.5rem;
@@ -117,4 +202,50 @@ button:hover {
   .question {
     padding-bottom: 15px;
   }
+
+  .container {
+    padding: 10px;
+  }
 }
+
+/* ==============
+   Print Styles
+   ============== */
+@media print {
+  body, .container {
+    background: #fff !important;
+    color: #000 !important;
+    box-shadow: none !important;
+  }
+  button,
+  nav,
+  footer,
+  #result {
+    display: none !important;
+  }
+  input, textarea, select {
+    border: 1px solid #000 !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
+
+/* ====================
+   Utility & A11y Styles
+   ==================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+::-webkit-input-placeholder { color: #aaa; }
+::-moz-placeholder { color: #aaa; }
+:-ms-input-placeholder { color: #aaa; }
+::placeholder { color: #aaa; }
+```
