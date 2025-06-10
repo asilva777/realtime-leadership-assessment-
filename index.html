@@ -1,48 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<link rel="manifest" href="manifest.json">
+  <!-- Meta tags for responsiveness and SEO -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="description" content="Real-Time Leadership Self-Assessment Tool">
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Title and stylesheet -->
   <title>Real-Time Leadership Self-Assessment</title>
   <link rel="stylesheet" href="style.css"/>
+  <!-- Google Fonts via HTTPS -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Chart.js via HTTPS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>Real-Time Leadership Self-Assessment</h1>
-
-    <form id="assessment-form">
-      <fieldset>
-        <legend>Personal Information</legend>
-        <input type="text" placeholder="First Name" name="firstName" required>
-        <input type="text" placeholder="Last Name" name="lastName" required>
-        <input type="text" placeholder="Organization" name="organization" required>
-        <input type="text" placeholder="Position" name="position" required>
-        <input type="email" placeholder="Email" name="email" required>
-        <input type="tel" placeholder="Contact Number" name="contact" required>
-      </fieldset>
-
-      <section>
-        <h2>REAL-TIME CHALLENGES</h2>
-        <div class="question-set">
-          <!-- Questions inserted by JS -->
-        </div>
-      </section>
-
-      <section>
-        <h2>KEY ROLES OF REAL-TIME LEADER</h2>
-        <div class="question-set" id="roles-section">
-          <!-- Questions inserted by JS -->
-        </div>
-      </section>
-
-      <button type="submit">SUBMIT</button>
-    </form>
-
-    <div id="result"></div>
+  <!-- Loading animation overlay (hidden by default) -->
+  <div id="loading-overlay" style="display: none;">
+    <div class="spinner" aria-label="Loading"></div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- Main content of the page -->
+  <main>
+    <!-- Header with the app title -->
+    <header>
+      <h1>Real-Time Leadership Self-Assessment</h1>
+    </header>
+
+    <!-- Assessment Form Section -->
+    <section>
+      <!-- Assessment form start -->
+      <form id="assessment-form" novalidate>
+        <!-- Personal Information Section -->
+        <fieldset>
+          <legend>Personal Information</legend>
+
+          <!-- First Name -->
+          <label for="firstName">First Name:</label>
+          <input type="text" id="firstName" name="firstName" required title="Please enter your first name.">
+          <span class="error-message" id="firstNameError"></span>
+
+          <!-- Last Name -->
+          <label for="lastName">Last Name:</label>
+          <input type="text" id="lastName" name="lastName" required title="Please enter your last name.">
+          <span class="error-message" id="lastNameError"></span>
+
+          <!-- Organization -->
+          <label for="organization">Organization:</label>
+          <input type="text" id="organization" name="organization" required title="Please enter your organization.">
+          <span class="error-message" id="organizationError"></span>
+
+          <!-- Position -->
+          <label for="position">Position:</label>
+          <input type="text" id="position" name="position" required title="Please enter your position.">
+          <span class="error-message" id="positionError"></span>
+
+          <!-- Email -->
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required title="Please enter a valid email address.">
+          <span class="error-message" id="emailError"></span>
+
+          <!-- Contact Number -->
+          <label for="contact">Contact Number:</label>
+          <input type="tel" id="contact" name="contact" required pattern="[0-9+\s()-]{7,}" title="Please enter a valid contact number.">
+          <span class="error-message" id="contactError"></span>
+        </fieldset>
+
+        <!-- Real-Time Challenges Section -->
+        <section>
+          <h2>REAL-TIME CHALLENGES</h2>
+          <div class="question-set" id="challenges-section">
+            <!-- Questions inserted by JS -->
+          </div>
+        </section>
+
+        <!-- Key Roles of Real-Time Leader Section -->
+        <section>
+          <h2>KEY ROLES OF REAL-TIME LEADER</h2>
+          <div class="question-set" id="roles-section">
+            <!-- Questions inserted by JS -->
+          </div>
+        </section>
+
+        <!-- Submit Button -->
+        <button type="submit">SUBMIT</button>
+      </form>
+      <!-- Assessment form end -->
+
+      <!-- Results will be displayed here -->
+      <div id="result" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <!-- Enhanced loading animation styles & basic accessibility -->
+  <style>
+    #loading-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(255,255,255,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #007BFF;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+    .error-message {
+      color: #d32f2f;
+      font-size: 0.95em;
+      display: block;
+      margin-bottom: 8px;
+      min-height: 1.2em;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 2px;
+      font-weight: 500;
+    }
+    input[type="text"], input[type="email"], input[type="tel"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 8px;
+      margin-bottom: 2px;
+      box-sizing: border-box;
+      font-size: 1em;
+    }
+    button[type="submit"] {
+      margin-top: 16px;
+      padding: 10px 24px;
+      font-size: 1.1em;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background: #0056b3;
+    }
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.2em;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) {
+      main { padding: 10px; }
+      header h1 { font-size: 1.3em; }
+    }
+  </style>
+
+  <!-- Main JavaScript file, loaded with defer for performance -->
+  <script src="script.js" defer></script>
+  <!-- Inline script for form validation and loader -->
+  <script>
+    // Show loading animation on form submit, validate inputs, and handle error messages
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('assessment-form');
+      const loadingOverlay = document.getElementById('loading-overlay');
+      const fields = [
+        { id: 'firstName', message: 'First name is required.' },
+        { id: 'lastName', message: 'Last name is required.' },
+        { id: 'organization', message: 'Organization is required.' },
+        { id: 'position', message: 'Position is required.' },
+        { id: 'email', message: 'A valid email is required.' },
+        { id: 'contact', message: 'A valid contact number is required.' }
+      ];
+
+      form.addEventListener('submit', function (e) {
+        let valid = true;
+        // Clear all error messages first
+        fields.forEach(field => {
+          document.getElementById(field.id + 'Error').textContent = '';
+        });
+
+        // Validate each field
+        fields.forEach(field => {
+          const input = document.getElementById(field.id);
+          if (!input.checkValidity()) {
+            document.getElementById(field.id + 'Error').textContent = input.title || field.message;
+            valid = false;
+          }
+        });
+
+        if (!valid) {
+          e.preventDefault();
+          return;
+        }
+
+        // Show loading animation
+        loadingOverlay.style.display = 'flex';
+      });
+
+      // Hide loading when result is shown (example for demo; adapt as needed)
+      const resultDiv = document.getElementById('result');
+      const observer = new MutationObserver(function() {
+        if (resultDiv.textContent.trim().length > 0) {
+          loadingOverlay.style.display = 'none';
+        }
+      });
+      observer.observe(resultDiv, { childList: true, subtree: true });
+    });
+  </script>
+  <!--
+    index.html - Real-Time Leadership Self-Assessment Tool
+    Enhancements:
+    - Accessibility: labels for all inputs, aria-live for result
+    - Performance: defer script loading, optimized structure
+    - Responsiveness: viewport & media queries
+    - Semantics: main, header, section, fieldset tags
+    - Error Handling: inline validation messages
+    - Security: HTTPS resources
+    - Interactivity: loading overlay animation
+    - Comments: structure and features explained
+  -->
 </body>
 </html>
